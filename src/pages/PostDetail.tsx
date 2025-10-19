@@ -92,60 +92,65 @@ const PostDetail = () => {
 
           {/* Article Content */}
           <div className="prose prose-lg max-w-none mb-8">
-            <h2>引言</h2>
+            <h2>引言：为什么是 React 18？</h2>
             <p>
-              React 18 是 React 历史上最重要的版本之一，它引入了许多革命性的特性，
-              其中最引人注目的就是并发渲染（Concurrent Rendering）和自动批处理（Automatic Batching）。
-              这些特性不仅提升了应用的性能，还为开发者提供了更好的用户体验。
+              React 18 是 React 历史上一次里程碑式的更新，其核心目标是为应用带来“并发”（Concurrency）。
+              并发模式并非一个全新的概念，但 React 18 将其带入了主流，彻底改变了我们编写高性能、高响应性用户界面的方式。
+              本文将深入探讨 React 18 最重要的两个特性：并发渲染（Concurrent Rendering）和自动批处理（Automatic Batching），以及它们如何赋能现代 Web 应用。
             </p>
 
-            <h2>并发渲染（Concurrent Rendering）</h2>
+            <Separator className="my-6" />
+
+            <h2>并发渲染（Concurrent Rendering）的核心机制</h2>
             <p>
-              并发渲染是 React 18 的核心特性之一。它允许 React 同时准备多个版本的 UI，
-              而不会阻塞主线程。这意味着即使在渲染复杂组件时，用户界面仍然保持响应。
+              在 React 18 之前，渲染是同步且不可中断的。一旦 React 开始处理状态更新，它就会“霸占”主线程，直到整个组件树渲染完成，这在高负载或慢速设备上会导致明显的卡顿。
+            </p>
+            <p>
+              并发渲染打破了这一限制。它允许 React 同时处理多个状态更新，甚至可以在渲染过程中暂停、恢复或放弃低优先级的渲染任务，从而优先处理用户交互（如输入、点击）。
+              这种机制使得应用在处理大量数据更新时，依然能保持流畅的用户体验。
             </p>
 
-            <h3>什么是并发渲染？</h3>
+            <h3>新的并发 Hooks：useTransition 和 useDeferredValue</h3>
             <p>
-              在传统的 React 渲染中，一旦开始渲染，就会一直持续到完成，期间无法中断。
-              而并发渲染允许 React 在渲染过程中暂停、恢复或放弃渲染，以响应更高优先级的更新。
+              为了让开发者能够利用并发特性，React 18 引入了两个新的 Hook：
+            </p>
+            <ul>
+              <li>
+                <strong><code>useTransition</code>:</strong> 允许我们将状态更新标记为“过渡”（Transition）。过渡更新是低优先级的，可以被中断。例如，在用户输入时，我们可以将更新搜索结果的请求标记为过渡，确保输入框的响应速度不受影响。
+              </li>
+              <li>
+                <strong><code>useDeferredValue</code>:</strong> 允许我们延迟更新 UI 的某个部分。它类似于防抖（Debounce），但它与并发模式集成，可以确保延迟的值不会阻塞高优先级的更新。
+              </li>
+            </ul>
+
+            <Separator className="my-6" />
+
+            <h2>自动批处理（Automatic Batching）的魔力</h2>
+            <p>
+              批处理（Batching）是将多个状态更新合并成一次重新渲染的过程。这对于性能至关重要，因为它避免了不必要的重复渲染。
+            </p>
+            <p>
+              在 React 18 之前，批处理只发生在 React 事件处理函数内部。例如，在一个 <code>onClick</code> 函数中调用两次 <code>setState</code> 只会触发一次重新渲染。然而，在 Promise、setTimeout 或原生事件处理函数中，每次 <code>setState</code> 都会触发一次渲染。
+            </p>
+            <p>
+              <strong>React 18 实现了自动批处理。</strong> 现在，无论状态更新发生在何处（事件处理、Promise、setTimeout、原生事件），React 都会自动将它们合并，只进行一次重新渲染。这极大地简化了开发者的心智负担，并保证了更好的默认性能。
             </p>
 
-            <h2>自动批处理（Automatic Batching）</h2>
+            <Separator className="my-6" />
+
+            <h2>Suspense 的改进与服务端组件（SSR）</h2>
             <p>
-              批处理是指 React 将多个状态更新合并到一个重新渲染中以提高性能。
-              在 React 18 之前，只有在 React 事件处理程序中的更新才会被批处理。
-              现在，所有更新都会被自动批处理，无论它们来自哪里。
+              React 18 对 Suspense 进行了重大改进，使其能够更好地与并发模式协同工作。现在，Suspense 不仅可以用于代码分割，还可以用于数据获取。
+            </p>
+            <p>
+              在服务端渲染（SSR）方面，React 18 引入了流式 SSR（Streaming SSR）和选择性水合（Selective Hydration）。这意味着服务器可以先发送 HTML 的非关键部分，让浏览器尽早渲染，同时在后台加载关键数据。当关键数据准备好后，React 会选择性地对页面进行水合，而不是等待整个应用加载完成，从而显著提升了大型应用的加载速度和用户感知性能。
             </p>
 
-            <h2>Suspense 的改进</h2>
+            <Separator className="my-6" />
+
+            <h2>总结与展望</h2>
             <p>
-              React 18 对 Suspense 进行了重大改进，使其更加实用和强大。
-              新的 Suspense 支持服务端渲染，并提供了更好的错误边界处理。
-            </p>
-
-            <h2>如何升级到 React 18</h2>
-            <p>
-              升级到 React 18 相对简单。首先，更新你的依赖：
-            </p>
-
-            <pre><code>{`npm install react@18 react-dom@18`}</code></pre>
-
-            <p>
-              然后，更新你的入口文件：
-            </p>
-
-            <pre><code>{`import { createRoot } from 'react-dom/client';
-
-const container = document.getElementById('root');
-const root = createRoot(container);
-root.render(<App />);`}</code></pre>
-
-            <h2>总结</h2>
-            <p>
-              React 18 带来的新特性为现代 Web 应用开发提供了强大的工具。
-              并发渲染、自动批处理和改进的 Suspense 让我们能够构建更快、
-              更响应的应用。建议开发者尽快升级到 React 18，以充分利用这些新特性。
+              React 18 不仅仅是版本号的升级，它代表了 React 架构的一次深刻变革。并发模式和自动批处理是构建现代、高性能 Web 应用的基石。建议所有 React 开发者尽快拥抱 React 18，并开始探索如何利用这些新特性来优化您的应用的用户体验。
             </p>
           </div>
 
