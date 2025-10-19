@@ -1,7 +1,41 @@
+import { useState } from "react";
 import { Github, Twitter, Mail, Heart } from "lucide-react";
 import { Link } from "react-router-dom";
+import { showSuccess, showError } from "@/utils/toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const Footer = () => {
+  const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || isLoading) return;
+
+    setIsLoading(true);
+
+    try {
+      const { error } = await supabase
+        .from("subscribers")
+        .insert([{ email: email.trim() }]);
+
+      if (error) {
+        if (error.code === '23505') { // Unique constraint violation
+          showError("您已订阅过该邮箱。");
+        } else {
+          showError(`订阅失败: ${error.message}`);
+        }
+      } else {
+        showSuccess("订阅成功！感谢您的支持。");
+        setEmail("");
+      }
+    } catch (err) {
+      showError("发生未知错误，请稍后再试。");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <footer className="border-t bg-muted/50">
       <div className="container mx-auto px-4 py-12">
@@ -49,16 +83,23 @@ const Footer = () => {
             <p className="text-sm text-muted-foreground mb-4">
               获取最新的文章和技术资讯
             </p>
-            <div className="space-y-2">
+            <form onSubmit={handleSubscribe} className="space-y-2">
               <input
                 type="email"
                 placeholder="输入您的邮箱"
-                className="w-full px-3 py-2 border rounded-md text-sm"
+                className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
               />
-              <button className="w-full bg-primary text-primary-foreground px-3 py-2 rounded-md text-sm hover:bg-primary/90 transition-colors">
-                订阅
+              <button 
+                type="submit"
+                className="w-full bg-primary text-primary-foreground px-3 py-2 rounded-md text-sm hover:bg-primary/90 transition-colors disabled:opacity-50"
+                disabled={isLoading}
+              >
+                {isLoading ? "订阅中..." : "订阅"}
               </button>
-            </div>
+            </form>
           </div>
         </div>
 
