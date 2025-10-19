@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Search, FileText, X } from "lucide-react";
-import { Link } from "react-router-dom"; // 导入 Link
+import { Link } from "react-router-dom";
 
 interface Post {
   id: number;
@@ -35,6 +35,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
       return;
     }
 
+    // Search logic: filter mock posts based on title or excerpt
     const filtered = mockPosts.filter(post =>
       post.title.toLowerCase().includes(query.toLowerCase()) ||
       post.excerpt.toLowerCase().includes(query.toLowerCase())
@@ -48,9 +49,10 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
     onClose();
   };
 
+  // 调整 DialogContent 样式，使其更像一个命令面板，并确保显示完整
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[600px] p-0 border-none shadow-2xl">
+      <DialogContent className="sm:max-w-lg w-[90vw] p-0 translate-y-[-25%] top-[10%]">
         <div className="flex items-center border-b px-4">
           <Search className="h-5 w-5 text-muted-foreground" />
           <Input
