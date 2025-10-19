@@ -10,7 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { showSuccess, showError } from "@/utils/toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const postSchema = z.object({
   title: z.string().min(5, "标题至少需要 5 个字符"),
@@ -20,9 +20,14 @@ const postSchema = z.object({
 
 type PostFormValues = z.infer<typeof postSchema>;
 
+// 临时密钥，用于在未实现完整认证前保护路由
+const ADMIN_SECRET_KEY = import.meta.env.VITE_ADMIN_SECRET_KEY;
+
 const NewPost = () => {
   const navigate = useNavigate();
-  
+  const [searchParams] = useSearchParams();
+  const accessKey = searchParams.get('key');
+
   const form = useForm<PostFormValues>({
     resolver: zodResolver(postSchema),
     defaultValues: {
@@ -63,6 +68,8 @@ const NewPost = () => {
     }
   };
 
+  const isAuthorized = accessKey === ADMIN_SECRET_KEY && ADMIN_SECRET_KEY;
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Header />
@@ -73,52 +80,59 @@ const NewPost = () => {
             <CardTitle className="text-2xl">发布新文章</CardTitle>
           </CardHeader>
           <CardContent>
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                <FormField
-                  control={form.control}
-                  name="title"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>标题</FormLabel>
-                      <FormControl>
-                        <Input placeholder="输入文章标题" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="excerpt"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>摘要</FormLabel>
-                      <FormControl>
-                        <Textarea placeholder="输入文章摘要 (用于邮件和卡片展示)" rows={3} {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="content"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>内容</FormLabel>
-                      <FormControl>
-                        <Textarea placeholder="输入文章的详细内容" rows={15} {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button type="submit" disabled={form.formState.isSubmitting}>
-                  {form.formState.isSubmitting ? "发布中..." : "发布文章"}
-                </Button>
-              </form>
-            </Form>
+            {!isAuthorized ? (
+              <div className="text-center py-12">
+                <h2 className="text-xl font-semibold text-destructive">访问被拒绝</h2>
+                <p className="text-muted-foreground mt-2">您没有权限访问此页面。请提供正确的密钥。</p>
+              </div>
+            ) : (
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                  <FormField
+                    control={form.control}
+                    name="title"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>标题</FormLabel>
+                        <FormControl>
+                          <Input placeholder="输入文章标题" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="excerpt"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>摘要</FormLabel>
+                        <FormControl>
+                          <Textarea placeholder="输入文章摘要 (用于邮件和卡片展示)" rows={3} {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="content"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>内容</FormLabel>
+                        <FormControl>
+                          <Textarea placeholder="输入文章的详细内容" rows={15} {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <Button type="submit" disabled={form.formState.isSubmitting}>
+                    {form.formState.isSubmitting ? "发布中..." : "发布文章"}
+                  </Button>
+                </form>
+              </Form>
+            )}
           </CardContent>
         </Card>
       </main>
