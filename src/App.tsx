@@ -8,6 +8,7 @@ import Posts from "./pages/Posts";
 import PostDetail from "./pages/PostDetail";
 import Categories from "./pages/Categories";
 import About from "./pages/About";
+import NewPost from "./pages/NewPost"; // Import the new page
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/posts/:id" element={<PostDetail />} />
           <Route path="/categories" element={<Categories />} />
           <Route path="/about" element={<About />} />
+          <Route path="/new-post" element={<NewPost />} /> {/* Add the new route */}
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
