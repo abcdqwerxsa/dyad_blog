@@ -1,5 +1,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import CommentSection from "@/components/CommentSection";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -174,6 +175,12 @@ root.render(<App />);`}</code></pre>
             </div>
           </footer>
         </article>
+
+        {/* Comments Section */}
+        <section className="max-w-4xl mx-auto mt-16">
+          <Separator className="mb-8" />
+          <CommentSection />
+        </section>
 
         {/* Related Posts */}
         <section className="max-w-4xl mx-auto mt-16">
