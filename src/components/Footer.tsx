@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 import { showSuccess, showError } from "@/utils/toast";
 import { supabase } from "@/integrations/supabase/client";
 
+// Edge Function URL for sending welcome email
+const WELCOME_EMAIL_FUNCTION_URL = "https://slfxuomampsfdosxtatr.supabase.co/functions/v1/send-welcome-email";
+
 const Footer = () => {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -15,6 +18,7 @@ const Footer = () => {
     setIsLoading(true);
 
     try {
+      // 1. Insert into database
       const { error } = await supabase
         .from("subscribers")
         .insert([{ email: email.trim() }]);
@@ -25,10 +29,31 @@ const Footer = () => {
         } else {
           showError(`订阅失败: ${error.message}`);
         }
-      } else {
-        showSuccess("订阅成功！感谢您的支持。");
-        setEmail("");
+        return;
       }
+
+      // 2. Call Edge Function to send welcome email
+      try {
+        const response = await fetch(WELCOME_EMAIL_FUNCTION_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            // We don't need Authorization header since RLS is handled by the function itself
+          },
+          body: JSON.stringify({ email: email.trim() }),
+        });
+
+        if (!response.ok) {
+          // Log error but don't fail the main subscription process
+          console.error("Failed to trigger welcome email function:", await response.text());
+        }
+      } catch (emailError) {
+        console.error("Error calling welcome email function:", emailError);
+      }
+
+      showSuccess("订阅成功！感谢您的支持。欢迎邮件已发送。");
+      setEmail("");
+
     } catch (err) {
       showError("发生未知错误，请稍后再试。");
     } finally {
