@@ -58,8 +58,8 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
           <Search className="h-5 w-5 text-muted-foreground mx-4" />
           <Input
             placeholder="搜索文章..."
-            // 移除所有边框、阴影和焦点环，确保输入框看起来是透明的，与容器融为一体
-            className="border-0 shadow-none focus-visible:ring-0 text-base h-14 flex-1 rounded-none w-full"
+            // 移除 w-full，并确保输入框样式干净
+            className="border-0 shadow-none focus-visible:ring-0 text-base h-14 flex-1 rounded-none"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             autoFocus
