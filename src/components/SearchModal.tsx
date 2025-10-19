@@ -53,17 +53,17 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-lg w-[90vw] p-0 translate-y-[-25%] top-[10%]">
-        <div className="flex items-center border-b px-4">
-          <Search className="h-5 w-5 text-muted-foreground" />
+        <div className="flex items-center border-b">
+          <Search className="h-5 w-5 text-muted-foreground mx-4" />
           <Input
             placeholder="搜索文章..."
-            // 修复样式重叠问题：确保输入框没有圆角，并占据剩余空间
-            className="border-none shadow-none focus-visible:ring-0 text-base h-14 flex-1 rounded-none"
+            // 移除所有边框、阴影和焦点环，确保输入框看起来是透明的，与容器融为一体
+            className="border-0 shadow-none focus-visible:ring-0 text-base h-14 flex-1 rounded-none w-full"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             autoFocus
           />
-          <X className="h-5 w-5 text-muted-foreground cursor-pointer hover:text-foreground" onClick={onClose} />
+          <X className="h-5 w-5 text-muted-foreground cursor-pointer hover:text-foreground mx-4" onClick={onClose} />
         </div>
         
         <div className="max-h-[400px] overflow-y-auto p-4">
