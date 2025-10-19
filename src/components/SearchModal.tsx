@@ -54,17 +54,23 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <SearchDialogContent className="sm:max-w-lg w-[90vw] p-0 translate-y-0 top-[10%]">
-        <div className="flex items-center border-b">
-          <Search className="h-5 w-5 text-muted-foreground mx-4" />
+        {/* 使用 items-stretch 确保子元素高度一致，并设置一个固定的高度 h-14 */}
+        <div className="flex items-stretch border-b h-14">
+          <div className="flex items-center mx-4">
+            <Search className="h-5 w-5 text-muted-foreground" />
+          </div>
           <Input
             placeholder="搜索文章..."
-            // 移除 w-full，并确保输入框样式干净
-            className="border-0 shadow-none focus-visible:ring-0 text-base h-14 flex-1 rounded-none"
+            // 移除 h-14，让 Input 内部的 padding 决定高度，并确保背景色一致
+            // 增加 px-0 py-0 确保 Input 内部没有额外的 padding 干扰 flex 布局
+            className="border-0 shadow-none focus-visible:ring-0 text-base flex-1 rounded-none bg-background px-0 py-0"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             autoFocus
           />
-          <X className="h-5 w-5 text-muted-foreground cursor-pointer hover:text-foreground mx-4" onClick={onClose} />
+          <div className="flex items-center mx-4">
+            <X className="h-5 w-5 text-muted-foreground cursor-pointer hover:text-foreground" onClick={onClose} />
+          </div>
         </div>
         
         <div className="max-h-[400px] overflow-y-auto p-4">
