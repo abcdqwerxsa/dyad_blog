@@ -3,15 +3,25 @@ import { Menu, X, Search, Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import SearchModal from "@/components/SearchModal";
+import { useTheme } from "next-themes"; // 导入 useTheme
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const { theme, setTheme } = useTheme(); // 使用 useTheme 钩子
+  const [mounted, setMounted] = useState(false);
+
+  // useEffect only runs on the client, so now we can safely show the UI
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-  const toggleDarkMode = () => setIsDarkMode(!isDarkMode);
   const toggleSearch = () => setIsSearchOpen(!isSearchOpen);
+  
+  const toggleDarkMode = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
+  };
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -27,6 +37,8 @@ const Header = () => {
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isSearchOpen]);
+
+  if (!mounted) return null; // 避免在 hydration 期间出现闪烁
 
   return (
     <>
@@ -76,7 +88,7 @@ const Header = () => {
               onClick={toggleDarkMode}
               className="hidden md:flex"
             >
-              {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+              {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </Button>
 
             <Button
