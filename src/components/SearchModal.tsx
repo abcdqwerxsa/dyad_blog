@@ -57,7 +57,8 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
           <Search className="h-5 w-5 text-muted-foreground" />
           <Input
             placeholder="搜索文章..."
-            className="border-none shadow-none focus-visible:ring-0 text-base h-14"
+            // 修复样式重叠问题：确保输入框没有圆角，并占据剩余空间
+            className="border-none shadow-none focus-visible:ring-0 text-base h-14 flex-1 rounded-none"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             autoFocus
