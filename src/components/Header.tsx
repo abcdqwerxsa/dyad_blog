@@ -3,15 +3,15 @@ import { Menu, X, Search, Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import SearchModal from "@/components/SearchModal";
-import { useTheme } from "next-themes"; // 导入 useTheme
+import { useTheme } from "next-themes";
+import { Link } from "react-router-dom"; // 导入 Link
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const { theme, setTheme } = useTheme(); // 使用 useTheme 钩子
+  const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  // useEffect only runs on the client, so now we can safely show the UI
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -38,30 +38,30 @@ const Header = () => {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isSearchOpen]);
 
-  if (!mounted) return null; // 避免在 hydration 期间出现闪烁
+  if (!mounted) return null;
 
   return (
     <>
       <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center space-x-8">
-            <a href="/" className="text-2xl font-bold text-primary">
+            <Link to="/" className="text-2xl font-bold text-primary">
               现代博客
-            </a>
+            </Link>
             
             <nav className="hidden md:flex items-center space-x-6">
-              <a href="/" className="text-sm font-medium hover:text-primary transition-colors">
+              <Link to="/" className="text-sm font-medium hover:text-primary transition-colors">
                 首页
-              </a>
-              <a href="/posts" className="text-sm font-medium hover:text-primary transition-colors">
+              </Link>
+              <Link to="/posts" className="text-sm font-medium hover:text-primary transition-colors">
                 文章
-              </a>
-              <a href="/categories" className="text-sm font-medium hover:text-primary transition-colors">
+              </Link>
+              <Link to="/categories" className="text-sm font-medium hover:text-primary transition-colors">
                 分类
-              </a>
-              <a href="/about" className="text-sm font-medium hover:text-primary transition-colors">
+              </Link>
+              <Link to="/about" className="text-sm font-medium hover:text-primary transition-colors">
                 关于
-              </a>
+              </Link>
             </nav>
           </div>
 
@@ -105,18 +105,18 @@ const Header = () => {
         {isMenuOpen && (
           <div className="md:hidden border-t bg-background">
             <nav className="container mx-auto px-4 py-4 space-y-3">
-              <a href="/" className="block text-sm font-medium hover:text-primary transition-colors">
+              <Link to="/" className="block text-sm font-medium hover:text-primary transition-colors" onClick={toggleMenu}>
                 首页
-              </a>
-              <a href="/posts" className="block text-sm font-medium hover:text-primary transition-colors">
+              </Link>
+              <Link to="/posts" className="block text-sm font-medium hover:text-primary transition-colors" onClick={toggleMenu}>
                 文章
-              </a>
-              <a href="/categories" className="block text-sm font-medium hover:text-primary transition-colors">
+              </Link>
+              <Link to="/categories" className="block text-sm font-medium hover:text-primary transition-colors" onClick={toggleMenu}>
                 分类
-              </a>
-              <a href="/about" className="block text-sm font-medium hover:text-primary transition-colors">
+              </Link>
+              <Link to="/about" className="block text-sm font-medium hover:text-primary transition-colors" onClick={toggleMenu}>
                 关于
-              </a>
+              </Link>
               <div className="pt-3">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />

@@ -5,9 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Calendar, Clock, User, Eye, Heart, MessageCircle, Share2, ArrowLeft } from "lucide-react";
+import { useNavigate, Link } from "react-router-dom"; // 导入 useNavigate 和 Link
 
 const PostDetail = () => {
+  const navigate = useNavigate(); // 初始化 useNavigate
+
   const post = {
+    id: 1, // Add ID for linking related posts
     title: "React 18 新特性深度解析：并发渲染与自动批处理",
     excerpt: "深入了解 React 18 带来的革命性变化，包括并发渲染、自动批处理、Suspense 改进等核心特性。",
     author: "张三",
@@ -22,12 +26,14 @@ const PostDetail = () => {
 
   const relatedPosts = [
     {
+      id: 2,
       title: "TypeScript 5.0 完全指南",
       excerpt: "探索 TypeScript 5.0 的最新特性...",
       date: "2024-01-12",
       readTime: "10 分钟"
     },
     {
+      id: 3,
       title: "Next.js 性能优化技巧",
       excerpt: "学习如何构建高性能的 Next.js 应用...",
       date: "2024-01-10",
@@ -41,7 +47,7 @@ const PostDetail = () => {
       
       <main className="container mx-auto px-4 py-8">
         {/* Back Button */}
-        <Button variant="ghost" className="mb-6">
+        <Button variant="ghost" className="mb-6" onClick={() => navigate(-1)}>
           <ArrowLeft className="h-4 w-4 mr-2" />
           返回文章列表
         </Button>
@@ -192,8 +198,12 @@ const PostDetail = () => {
           <Separator className="mb-8" />
           <h2 className="text-2xl font-bold mb-6">相关文章</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {relatedPosts.map((relatedPost, index) => (
-              <div key={index} className="border rounded-lg p-6 hover:shadow-md transition-shadow">
+            {relatedPosts.map((relatedPost) => (
+              <Link 
+                key={relatedPost.id} 
+                to={`/posts/${relatedPost.id}`} 
+                className="border rounded-lg p-6 hover:shadow-md transition-shadow block"
+              >
                 <h3 className="text-lg font-semibold mb-2 hover:text-primary cursor-pointer">
                   {relatedPost.title}
                 </h3>
@@ -204,7 +214,7 @@ const PostDetail = () => {
                   <Clock className="h-4 w-4 ml-4 mr-1" />
                   {relatedPost.readTime}
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </section>
