@@ -5,41 +5,44 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-// Replace with your actual email sending logic (e.g., Resend, SendGrid API call)
 async function sendEmail(recipientEmail: string) {
-  // In a real application, you would use Deno.env.get('RESEND_API_KEY')
-  // and make a secure API call here.
-  
-  console.log(`Attempting to send welcome email to: ${recipientEmail}`);
-
-  // --- Placeholder for actual email API call ---
-  // Example using Resend (requires RESEND_API_KEY secret)
-  /*
   const resendApiKey = Deno.env.get('RESEND_API_KEY');
+  
   if (!resendApiKey) {
-    console.error("RESEND_API_KEY not set.");
+    console.error("RESEND_API_KEY not set. Cannot send email.");
     return { success: false, message: "API Key missing" };
   }
 
-  const res = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${resendApiKey}`,
-    },
-    body: JSON.stringify({
-      from: 'onboarding@yourdomain.com',
-      to: recipientEmail,
-      subject: '欢迎订阅现代博客！',
-      html: '<strong>感谢您的订阅！</strong> 您将第一时间收到我们的最新技术文章。',
-    }),
-  });
+  // IMPORTANT: The 'from' email must be a domain or email address verified in your Resend account.
+  const FROM_EMAIL = 'onboarding@example.com'; 
 
-  return { success: res.ok, status: res.status };
-  */
-  
-  // Mock success for demonstration
-  return { success: true, message: "Email simulated successfully" };
+  console.log(`Attempting to send welcome email to: ${recipientEmail} from ${FROM_EMAIL}`);
+
+  try {
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${resendApiKey}`,
+      },
+      body: JSON.stringify({
+        from: FROM_EMAIL,
+        to: recipientEmail,
+        subject: '欢迎订阅现代博客！',
+        html: '<strong>感谢您的订阅！</strong> 您将第一时间收到我们的最新技术文章。',
+      }),
+    });
+
+    if (!res.ok) {
+      const errorBody = await res.json();
+      console.error("Resend API Error:", errorBody);
+    }
+
+    return { success: res.ok, status: res.status };
+  } catch (error) {
+    console.error("Network or Fetch Error:", error);
+    return { success: false, message: "Failed to connect to Resend API" };
+  }
 }
 
 serve(async (req) => {
@@ -66,7 +69,6 @@ serve(async (req) => {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     } else {
-      console.error("Email sending failed:", emailResult);
       return new Response(JSON.stringify({ error: 'Failed to send welcome email' }), {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
