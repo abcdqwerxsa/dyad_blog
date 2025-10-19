@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { BookOpen, TrendingUp, Code, Palette, Server, Cpu, Database, Globe } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Categories = () => {
   const categories = [
@@ -85,23 +86,25 @@ const Categories = () => {
           <h2 className="text-2xl font-bold mb-8">热门分类</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {featuredCategories.map((category, index) => (
-              <Card key={index} className="group hover:shadow-lg transition-all duration-300 cursor-pointer">
-                <CardHeader className="text-center">
-                  <div className={`w-16 h-16 ${category.color} rounded-full flex items-center justify-center text-white mx-auto mb-4 group-hover:scale-110 transition-transform`}>
-                    {category.icon}
-                  </div>
-                  <CardTitle className="text-lg">{category.name}</CardTitle>
-                  <CardDescription>{category.description}</CardDescription>
-                </CardHeader>
-                <CardContent className="text-center">
-                  <Badge variant="secondary" className="mb-4">
-                    {category.postCount} 篇文章
-                  </Badge>
-                  <Button variant="outline" className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                    查看文章
-                  </Button>
-                </CardContent>
-              </Card>
+              <Link to={`/posts?category=${category.name}`} key={index} className="block">
+                <Card className="group hover:shadow-lg transition-all duration-300 cursor-pointer h-full">
+                  <CardHeader className="text-center">
+                    <div className={`w-16 h-16 ${category.color} rounded-full flex items-center justify-center text-white mx-auto mb-4 group-hover:scale-110 transition-transform`}>
+                      {category.icon}
+                    </div>
+                    <CardTitle className="text-lg">{category.name}</CardTitle>
+                    <CardDescription>{category.description}</CardDescription>
+                  </CardHeader>
+                  <CardContent className="text-center">
+                    <Badge variant="secondary" className="mb-4">
+                      {category.postCount} 篇文章
+                    </Badge>
+                    <Button variant="outline" className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                      查看文章
+                    </Button>
+                  </CardContent>
+                </Card>
+              </Link>
             ))}
           </div>
         </section>
@@ -129,9 +132,11 @@ const Categories = () => {
                   <p className="text-sm text-muted-foreground mb-4">
                     {category.description}
                   </p>
-                  <Button variant="ghost" size="sm" className="group/btn">
-                    浏览分类
-                    <span className="ml-1 group-hover/btn:translate-x-1 transition-transform">→</span>
+                  <Button variant="ghost" size="sm" className="group/btn" asChild>
+                    <Link to={`/posts?category=${category.name}`}>
+                      浏览分类
+                      <span className="ml-1 group-hover/btn:translate-x-1 transition-transform">→</span>
+                    </Link>
                   </Button>
                 </CardContent>
               </Card>

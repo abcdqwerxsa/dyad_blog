@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Github, Twitter, Linkedin, Mail, Download, Award, BookOpen, Users, Lightbulb } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const About = () => {
   const skills = [
@@ -58,9 +59,11 @@ const About = () => {
             </p>
             
             <div className="flex flex-wrap justify-center gap-4 mb-8">
-              <Button size="lg" className="group">
-                <Mail className="h-4 w-4 mr-2" />
-                联系我
+              <Button size="lg" className="group" asChild>
+                <a href="mailto:example@example.com">
+                  <Mail className="h-4 w-4 mr-2" />
+                  联系我
+                </a>
               </Button>
               <Button variant="outline" size="lg" className="group">
                 <Download className="h-4 w-4 mr-2" />
@@ -78,7 +81,7 @@ const About = () => {
               <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
                 <Linkedin className="h-6 w-6" />
               </a>
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+              <a href="mailto:example@example.com" className="text-muted-foreground hover:text-primary transition-colors">
                 <Mail className="h-6 w-6" />
               </a>
             </div>
@@ -197,12 +200,16 @@ const About = () => {
             如果您对我的文章感兴趣，或者想要交流技术问题，欢迎随时联系我
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg">
-              <Mail className="h-4 w-4 mr-2" />
-              发送邮件
+            <Button size="lg" asChild>
+              <a href="mailto:example@example.com">
+                <Mail className="h-4 w-4 mr-2" />
+                发送邮件
+              </a>
             </Button>
-            <Button variant="outline" size="lg">
-              订阅博客
+            <Button variant="outline" size="lg" asChild>
+              <Link to="/">
+                订阅博客
+              </Link>
             </Button>
           </div>
         </section>

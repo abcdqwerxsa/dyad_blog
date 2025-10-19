@@ -1,4 +1,5 @@
 import { Github, Twitter, Mail, Heart } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -26,20 +27,20 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold mb-4">快速链接</h4>
             <ul className="space-y-2 text-sm">
-              <li><a href="/" className="text-muted-foreground hover:text-primary transition-colors">首页</a></li>
-              <li><a href="/posts" className="text-muted-foreground hover:text-primary transition-colors">所有文章</a></li>
-              <li><a href="/categories" className="text-muted-foreground hover:text-primary transition-colors">分类</a></li>
-              <li><a href="/about" className="text-muted-foreground hover:text-primary transition-colors">关于我</a></li>
+              <li><Link to="/" className="text-muted-foreground hover:text-primary transition-colors">首页</Link></li>
+              <li><Link to="/posts" className="text-muted-foreground hover:text-primary transition-colors">所有文章</Link></li>
+              <li><Link to="/categories" className="text-muted-foreground hover:text-primary transition-colors">分类</Link></li>
+              <li><Link to="/about" className="text-muted-foreground hover:text-primary transition-colors">关于我</Link></li>
             </ul>
           </div>
 
           <div>
             <h4 className="font-semibold mb-4">热门分类</h4>
             <ul className="space-y-2 text-sm">
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">前端开发</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">后端技术</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">人工智能</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">开发工具</a></li>
+              <li><Link to="/posts?category=前端开发" className="text-muted-foreground hover:text-primary transition-colors">前端开发</Link></li>
+              <li><Link to="/posts?category=后端技术" className="text-muted-foreground hover:text-primary transition-colors">后端技术</Link></li>
+              <li><Link to="/posts?category=人工智能" className="text-muted-foreground hover:text-primary transition-colors">人工智能</Link></li>
+              <li><Link to="/posts?category=开发工具" className="text-muted-foreground hover:text-primary transition-colors">开发工具</Link></li>
             </ul>
           </div>
 
