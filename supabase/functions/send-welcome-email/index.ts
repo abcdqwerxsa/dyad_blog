@@ -14,7 +14,7 @@ async function sendEmail(recipientEmail: string) {
   }
 
   // IMPORTANT: The 'from' email must be a domain or email address verified in your Resend account.
-  const FROM_EMAIL = 'onboarding@example.com'; 
+  const FROM_EMAIL = 'noreply@tuple2.dpdns.org'; 
 
   console.log(`Attempting to send welcome email to: ${recipientEmail} from ${FROM_EMAIL}`);
 

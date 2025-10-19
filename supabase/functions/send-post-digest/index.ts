@@ -37,7 +37,7 @@ async function sendDigestEmail(postTitle: string, postExcerpt: string) {
   }
 
   // 2. Prepare email content
-  const FROM_EMAIL = 'newsletter@example.com'; 
+  const FROM_EMAIL = 'noreply@tuple2.dpdns.org'; 
   const subject = `新文章发布: ${postTitle}`;
   const htmlContent = `
     <h1>${postTitle}</h1>
